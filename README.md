@@ -18,6 +18,7 @@ Dự án dự đoán giá cổ phiếu kết hợp chiến lược đường tru
 
 ## 📂 Cấu trúc thư mục:
 
+```
 ├── data/ # Thư mục dữ liệu thô nếu cần lưu cục bộ
 ├── model/ # Lưu trữ các mô hình LSTM theo từng ticker (ví dụ: lstm_model_AAPL.pth)
 ├── pic/ # Lưu trữ các biểu đồ được sinh ra
@@ -31,6 +32,7 @@ Dự án dự đoán giá cổ phiếu kết hợp chiến lược đường tru
 │ ├── predict.py # Dự đoán giá tương lai
 │ ├── visualization.py# Vẽ biểu đồ
 │ ├── main.py # Tích hợp toàn bộ workflow
+```
 
 ## Công nghệ sử dụng
 - Python, PyTorch, Pandas, Matplotlib, Numpy
@@ -55,6 +57,6 @@ python -m src.predict
 ```
 
 - Tích hợp toàn bộ workflow (SMA + LSTM):
-```
+```bash
 python -m src.main
 ```
