@@ -3,10 +3,6 @@ __pycache__/
 *.py[cod]
 *.so
 
-# Data files
-data/
-models/
-
 # Jupyter Notebook Checkpoints
 .ipynb_checkpoints/
 
