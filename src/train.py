@@ -74,3 +74,7 @@ if __name__ == "__main__":
     model = LSTMModel()
     save_path = f'{model_path}/lstm_model_{ticker}.pth'
     train_and_save(model, X, y, save_path)
+
+    # Thông báo hoàn thành
+    print(f"Huấn luyện mô hình hoàn tất và đã lưu tại {save_path}")
+    print("Bạn có thể sử dụng mô hình này để dự báo giá trong tương lai.")

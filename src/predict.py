@@ -38,4 +38,9 @@ def predict_future(ticker=default_ticker):
     print(f"Giá hiện tại: {latest_price:.2f}, Dự báo giá tiếp theo: {predicted_price:.2f}")
 
 if __name__ == "__main__":
-    predict_future()
+    from src.config import default_ticker, suggested_tickers
+    print("Danh sách ticker gợi ý:")
+    print(", ".join(suggested_tickers))
+    user_ticker = input(f"Nhập ticker (mặc định {default_ticker}): ").strip()
+    ticker = user_ticker if user_ticker else default_ticker
+    predict_future(ticker=ticker)
