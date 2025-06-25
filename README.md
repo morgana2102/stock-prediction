@@ -19,19 +19,23 @@ Dự án dự đoán giá cổ phiếu kết hợp chiến lược đường tru
 ## 📂 Cấu trúc thư mục:
 
 ```
-├── data/ # Thư mục dữ liệu thô nếu cần lưu cục bộ
-├── model/ # Lưu trữ các mô hình LSTM theo từng ticker (ví dụ: lstm_model_AAPL.pth)
-├── pic/ # Lưu trữ các biểu đồ được sinh ra
-├── src/ # Toàn bộ mã nguồn chính
-│ ├── config.py # Tham số cấu hình (ticker, SMA, đường dẫn, v.v.)
-│ ├── data_loader.py # Load dữ liệu từ Stooq
-│ ├── scaling_data.py # Chuẩn hóa dữ liệu
-│ ├── strategy.py # Chiến lược SMA
-│ ├── model.py # Mô hình LSTM với PyTorch
-│ ├── train.py # Huấn luyện mô hình
-│ ├── predict.py # Dự đoán giá tương lai
-│ ├── visualization.py# Vẽ biểu đồ
-│ ├── main.py # Tích hợp toàn bộ workflow
+├── data/                  # Thư mục lưu dữ liệu thô nếu cần lưu cục bộ
+├── model/                 # Lưu trữ các mô hình LSTM theo từng ticker (ví dụ: lstm_model_AAPL.pth)
+├── pic/                   # Lưu trữ các biểu đồ sinh ra
+├── src/                   # Toàn bộ mã nguồn chính
+│   ├── config.py          # Tham số cấu hình (ticker, SMA, đường dẫn, v.v.)
+│   ├── data_loader.py     # Load dữ liệu từ Stooq
+│   ├── scaling_data.py    # Chuẩn hóa dữ liệu
+│   ├── strategy.py        # Chiến lược SMA
+│   ├── model.py           # Mô hình LSTM với PyTorch
+│   ├── train.py           # Huấn luyện mô hình
+│   ├── predict.py         # Dự đoán giá tương lai
+│   ├── visualization.py   # Vẽ biểu đồ
+│   └── main.py            # Tích hợp toàn bộ workflow
+├── .env                   # Thông tin môi trường nếu cần
+├── .gitignore
+├── README.md
+└── requirements.txt       # Thư viện phụ thuộc
 ```
 
 ## Công nghệ sử dụng
