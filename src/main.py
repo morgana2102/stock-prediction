@@ -1,4 +1,4 @@
-from src.data_loader import load_realtime_data
+from src.data_loader import load_data
 from src.strategy import apply_sma_strategy, grid_search_sma
 from src.predict import predict_future
 from src.visualization import *
@@ -10,7 +10,10 @@ user_ticker = input(f"Nhập ticker (mặc định {default_ticker}): ").strip()
 ticker = user_ticker if user_ticker else default_ticker
 print(f"Sử dụng ticker: {ticker}")
 
-data = load_realtime_data(ticker)
+print('Chọn kiểu dữ liệu: Y nếu muốn tải dữ liệu thời gian thực, N nếu muốn tải dữ liệu từ file đã lưu.')
+data_source = input("Nhập Y hoặc N: ").strip().upper()
+data_source = 'https://stooq.com' if data_source == 'Y' else 'local'
+data = load_data(ticker, data_source)
 
 # Grid Search tìm bộ tham số SMA tối ưu
 sma_param_results = grid_search_sma(data, short_range, long_range)

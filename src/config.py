@@ -5,4 +5,4 @@ long_range = range(50, 300, 10) # Khoảng tìm kiếm bộ tham số SMA dài
 sequence_length = 60 # Chiều dài chuỗi đầu vào cho mô hình LSTM
 model_path = "../stock-prediction/model"  # Đường dẫn lưu mô hình LSTM
 pic_path = "../stock-prediction/pic"  # Thư mục lưu ảnh biểu đồ
-data_source = "https://stooq.com"  # Nguồn dữ liệu, có thể là 'stooq' hoặc 'yahoo'
+data_source = "https://stooq.com"  # Nguồn dữ liệu, có thể là 'https://stooq.com' hoặc 'local'

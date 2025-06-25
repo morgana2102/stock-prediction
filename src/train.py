@@ -45,12 +45,11 @@ def train_and_save(model, X, y, save_path=model_path, num_epochs=100, lr=0.001):
     os.makedirs(os.path.dirname(save_path), exist_ok=True)
     train_model(model, X, y, num_epochs=num_epochs, lr=lr)
     torch.save(model.state_dict(), save_path)
-    print(f"Đã lưu mô hình vào {save_path}")
 
     return model
 
 if __name__ == "__main__":
-    from src.data_loader import load_realtime_data
+    from src.data_loader import load_data
     from src.model import LSTMModel
     from src.create_sequences import create_sequences
     from src.scaling_data import scale_data
@@ -62,8 +61,12 @@ if __name__ == "__main__":
     user_ticker = input(f"Nhập ticker (mặc định {default_ticker}): ").strip()
     ticker = user_ticker if user_ticker else default_ticker
     print(f"Sử dụng ticker: {ticker}")
-    
-    data = load_realtime_data(ticker)
+
+    print('Chọn kiểu dữ liệu: Y nếu muốn train bằng dữ liệu thời gian thực,' \
+    ' N nếu muốn train bằng dữ liệu từ file đã lưu.')
+    data_source = input("Nhập Y hoặc N: ").strip().upper()
+    data_source = 'https://stooq.com' if data_source == 'Y' else 'local'
+    data = load_data(ticker, data_source)
     features = data[['Close']].values
     scaled_features, scaler = scale_data(features)
     X, y = create_sequences(scaled_features, sequence_length)
