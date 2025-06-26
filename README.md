@@ -1,17 +1,17 @@
-# 📈 Stock Price Prediction with SMA Strategy & LSTM (PyTorch)
+# 📈 Stock Price Prediction with SMA Strategy & RNN + LSTM (PyTorch)
 
-Dự án dự đoán giá cổ phiếu kết hợp chiến lược đường trung bình động (SMA) và mô hình LSTM (PyTorch). Project hỗ trợ lưu trữ mô hình theo từng ticker và hiển thị trực quan kết quả.
+Dự án dự đoán giá cổ phiếu kết hợp chiến lược đường trung bình động (SMA) và mô hình RNN + LSTM (PyTorch). Project hỗ trợ lưu trữ mô hình theo từng ticker và hiển thị trực quan kết quả.
 
 ## 🚀 Tính năng chính:
 
 ✅ Tải dữ liệu thời gian thực từ Stooq  
 ✅ Chiến lược giao dịch SMA linh hoạt với tham số tùy chỉnh  
-✅ Huấn luyện mô hình LSTM dự đoán giá đóng cửa cổ phiếu  
+✅ Huấn luyện mô hình RNN + LSTM dự đoán giá đóng cửa cổ phiếu  
 ✅ Lưu mô hình riêng biệt cho từng ticker  
 ✅ Dự đoán giá tương lai từ mô hình đã train  
 ✅ Biểu đồ trực quan so sánh:
 - Hiệu suất tích lũy giữa thị trường và chiến lược SMA
-- Giá thực tế và giá dự báo từ LSTM
+- Giá thực tế và giá dự báo từ RNN + LSTM
 - Tỷ suất sinh lời hàng ngày thực tế và dự báo  
 
 ---
@@ -20,7 +20,7 @@ Dự án dự đoán giá cổ phiếu kết hợp chiến lược đường tru
 
 ```
 ├── data/                  # Thư mục lưu dữ liệu thô nếu cần lưu cục bộ
-├── model/                 # Lưu trữ các mô hình LSTM theo từng ticker (ví dụ: lstm_model_AAPL.pth)
+├── model/                 # Lưu trữ các mô hình RNN + LSTM theo từng ticker (ví dụ: model_AAPL.pth)
 ├── pic/                   # Lưu trữ các biểu đồ sinh ra
 ├── src/                   # Toàn bộ mã nguồn chính
 │   ├── config.py          # Tham số cấu hình (ticker, SMA, đường dẫn, v.v.)
@@ -62,7 +62,7 @@ python -m src.train --ticker AAPL --data_source Y --sequence_length 60
 python -m src.predict --ticker AAPL
 ```
 
-- **Tích hợp toàn bộ workflow (SMA + LSTM):**
+- **Tích hợp toàn bộ workflow (SMA & RNN + LSTM):**
 ```bash
 python -m src.main --ticker AAPL --data_source Y
 ```
@@ -75,5 +75,5 @@ python -m src.visualization --ticker AAPL --short_window 20 --long_window 100
 > Tham số:
 > - `--ticker`: Mã cổ phiếu (ví dụ: AAPL, MSFT, VNM, ...)
 > - `--data_source`: `Y` để tải dữ liệu thời gian thực, `N` để dùng dữ liệu local
-> - `--sequence_length`: Độ dài chuỗi cho LSTM
+> - `--sequence_length`: Độ dài chuỗi cho RNN + LSTM
 > - `--short_window`, `--long_window`: Tham số
