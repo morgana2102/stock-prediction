@@ -16,7 +16,7 @@ def format_ticker(ticker, data_source="https://stooq.com"):
         else:
             return f'{ticker.lower()}_us'  # Thêm đuôi _us cho dữ liệu cục bộ
     else:
-        raise ValueError("Nguồn dữ liệu không hợp lệ. Chỉ hỗ trợ 'https://stooq.com' hoặc 'local'.")
+        return ticker.lower()  # Mặc định trả về mã chứng khoán ở dạng chữ thường
 
 def load_realtime_data(ticker, data_source="https://stooq.com", interval='d'):
     """Tải dữ liệu từ data_source (Stooq) theo thời gian thực."""
@@ -32,6 +32,7 @@ def load_realtime_data(ticker, data_source="https://stooq.com", interval='d'):
     return data
 
 def load_data(ticker, data_source):
+    """ Tải dữ liệu chứng khoán từ nguồn dữ liệu đã chỉ định."""
     ticker = format_ticker(ticker, data_source)
     if data_source == "https://stooq.com":
         return load_realtime_data(ticker, data_source)

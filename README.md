@@ -48,19 +48,32 @@ Dự án dự đoán giá cổ phiếu kết hợp chiến lược đường tru
 pip install -r requirements.txt
 ```
 
-- Cấu hình tham số tại ```src/config.py```
+- Cấu hình tham số tại `src/config.py` nếu muốn thay đổi mặc định.
 
-- Huấn luyện mô hình:
+### Ví dụ lệnh chạy với các tham số dòng lệnh
+
+- **Huấn luyện mô hình:**
 ```bash
-python -m src.train
+python -m src.train --ticker AAPL --data_source Y --sequence_length 60
 ```
 
-- Dự đoán giá tương lai:
+- **Dự đoán giá tương lai:**
 ```bash
-python -m src.predict
+python -m src.predict --ticker AAPL
 ```
 
-- Tích hợp toàn bộ workflow (SMA + LSTM):
+- **Tích hợp toàn bộ workflow (SMA + LSTM):**
 ```bash
-python -m src.main
+python -m src.main --ticker AAPL --data_source Y
 ```
+
+- **Vẽ biểu đồ (nếu muốn chạy riêng):**
+```bash
+python -m src.visualization --ticker AAPL --short_window 20 --long_window 100
+```
+
+> Tham số:
+> - `--ticker`: Mã cổ phiếu (ví dụ: AAPL, MSFT, VNM, ...)
+> - `--data_source`: `Y` để tải dữ liệu thời gian thực, `N` để dùng dữ liệu local
+> - `--sequence_length`: Độ dài chuỗi cho LSTM
+> - `--short_window`, `--long_window`: Tham số

@@ -1,8 +1,9 @@
 default_ticker = "AAPL" # Ví dụ: Apple trên sàn Mỹ
+ticker = "AAPL"  # Mã chứng khoán mặc định, có thể thay đổi theo nhu cầu
 suggested_tickers = ["AAPL", "MSFT", "TSLA", "GOOG", "BTC-USD"] # Danh sách mã chứng khoán gợi ý
 short_range = range(10, 100, 5) # Khoảng tìm kiếm bộ tham số SMA ngắn
 long_range = range(50, 300, 10) # Khoảng tìm kiếm bộ tham số SMA dài
 sequence_length = 60 # Chiều dài chuỗi đầu vào cho mô hình LSTM
-model_path = "../stock-prediction/model"  # Đường dẫn lưu mô hình LSTM
+model_path = "../stock-prediction/model"  # Đường dẫn đến mô hình LSTM
 pic_path = "../stock-prediction/pic"  # Thư mục lưu ảnh biểu đồ
 data_source = "https://stooq.com"  # Nguồn dữ liệu, có thể là 'https://stooq.com' hoặc 'local'

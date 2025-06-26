@@ -1,7 +1,7 @@
 import torch
 import os
 from src.data_loader import load_realtime_data
-from src.model import LSTMModel
+from src.model import LSTMModel, RNN_LSTMModel
 from src.config import default_ticker, sequence_length, model_path
 from src.scaling_data import scale_data
 from src.create_sequences import create_sequences
@@ -15,7 +15,7 @@ def predict_future(ticker=default_ticker):
         list: Dự báo giá đóng cửa tương lai.
     """
     global model_path, sequence_length
-    model_file = f"{model_path}/lstm_model_{ticker}.pth"
+    model_file = f"{model_path}/model_{ticker}.pth"
     if not os.path.exists(model_file):
         raise FileNotFoundError(f"Không tìm thấy mô hình tại {model_file}. Vui lòng train trước.")
 
@@ -27,7 +27,7 @@ def predict_future(ticker=default_ticker):
     X, _ = create_sequences(scaled_data, sequence_length)
     X = torch.tensor(X).float()
 
-    model = LSTMModel()
+    model = RNN_LSTMModel()
     model.load_state_dict(torch.load(model_file))
     model.eval()
 
@@ -38,9 +38,18 @@ def predict_future(ticker=default_ticker):
     print(f"Giá hiện tại: {latest_price:.2f}, Dự báo giá tiếp theo: {predicted_price:.2f}")
 
 if __name__ == "__main__":
-    from src.config import default_ticker, suggested_tickers
-    print("Danh sách ticker gợi ý:")
-    print(", ".join(suggested_tickers))
-    user_ticker = input(f"Nhập ticker (mặc định {default_ticker}): ").strip()
-    ticker = user_ticker if user_ticker else default_ticker
-    predict_future(ticker=ticker)
+    import argparse
+    import src.config as config
+
+    # Thiết lập parser cho các tham số dòng lệnh
+    parser = argparse.ArgumentParser(description="Stock Price Prediction - Predict Future")
+    parser.add_argument('--ticker', type=str, default=config.ticker, help='Mã cổ phiếu')
+    args = parser.parse_args()
+
+    # Cập nhật config bằng giá trị truyền vào
+    config.ticker = args.ticker
+
+    print(f"Đang dự báo giá tiếp theo cho ticker: {config.ticker}")
+
+    # Dự báo giá tiếp theo sử dụng mô hình đã lưu
+    predict_future(ticker=config.ticker)

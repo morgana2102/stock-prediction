@@ -58,3 +58,45 @@ def grid_search_sma(data, short_range, long_range):
             final_return = cumulative_return.iloc[-1]
             results.append({"short_window": short_w, "long_window": long_w, "final_return": final_return})
     return pd.DataFrame(results).sort_values(by="final_return", ascending=False)
+
+if __name__ == "__main__":
+    import argparse
+    import src.config as config
+    from src.data_loader import load_data
+
+    # print("Danh sách ticker gợi ý:")
+    # print(", ".join(suggested_tickers))
+    # user_ticker = input(f"Nhập ticker (mặc định {default_ticker}): ").strip()
+    # ticker = user_ticker if user_ticker else default_ticker
+    # print(f"Sử dụng ticker: {ticker}")
+
+    # print('Chọn kiểu dữ liệu: Y nếu muốn tải dữ liệu thời gian thực, N nếu muốn tải dữ liệu từ file đã lưu.')
+    # data_source = input("Nhập Y hoặc N: ").strip().upper()
+    # data_source = 'https://stooq.com' if data_source == 'Y' else 'local'
+
+    # Thiết lập parser cho các tham số dòng lệnh
+    parser = argparse.ArgumentParser(description="SMA Strategy Config")
+    parser.add_argument('--ticker', type=str, default=config.ticker, help='Mã cổ phiếu')
+    parser.add_argument('--data_source', type=str, choices=['Y', 'N'], default='N',
+                        help='Y: tải dữ liệu thời gian thực, N: tải dữ liệu từ file đã lưu')
+    parser.add_argument('--short_range', type=int, nargs='+', default=config.short_range, help='Khoảng giá trị cho kỳ hạn SMA ngắn hạn')
+    parser.add_argument('--long_range', type=int, nargs='+', default=config.long_range, help='Khoảng giá trị cho kỳ hạn SMA dài hạn')
+    args = parser.parse_args()
+
+    # Cập nhật config bằng giá trị truyền vào
+    config.ticker = args.ticker
+    config.data_source = 'https://stooq.com' if args.data_source == 'Y' else 'local'
+    config.short_range = args.short_range
+    config.long_range = args.long_range
+
+    print(f"Đang chạy với ticker: {config.ticker}, Nguồn dữ liệu: {config.data_source}, Kỳ hạn SMA ngắn hạn: {config.short_range}, Kỳ hạn SMA dài hạn: {config.long_range}")
+
+    data = load_data(config.ticker, config.data_source)
+
+    # Grid Search tìm bộ tham số SMA tối ưu
+    sma_param_results = grid_search_sma(data, config.short_range, config.long_range)
+    print(sma_param_results.head())
+
+    # In ra bộ tham số tốt nhất
+    best = sma_param_results.iloc[0]
+    print(f"Bộ tham số tốt nhất: SMA ngắn hạn = {best['short_window']}, SMA dài hạn = {best['long_window']}, Lợi nhuận cuối cùng = {best['final_return']:.4f}")

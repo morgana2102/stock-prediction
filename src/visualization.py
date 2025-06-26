@@ -7,7 +7,7 @@ import os
 import torch
 from src.config import pic_path, model_path
 from src.create_sequences import create_sequences
-from src.model import LSTMModel
+from src.model import LSTMModel, RNN_LSTMModel
 from src.scaling_data import scale_data
 from src.strategy import apply_sma_strategy
 from src.config import sequence_length
@@ -63,7 +63,7 @@ def plot_daily_return_sma(data, short_window, long_window, save_path=f"{pic_path
 
 def plot_stock_price_lstm(data, ticker, save_path=f"{pic_path}/lstm_prediction.png"):
     """
-    Vẽ biểu đồ giá thực tế và giá dự báo từ mô hình LSTM.
+    Vẽ biểu đồ giá thực tế và giá dự báo từ mô hình RNN + LSTM.
     Args:
         data (pd.DataFrame): Dữ liệu giá cổ phiếu với cột 'Date' và 'Close'.
         predicted_prices (list or np.array): Giá dự báo từ mô hình LSTM.
@@ -81,14 +81,14 @@ def plot_stock_price_lstm(data, ticker, save_path=f"{pic_path}/lstm_prediction.p
     X = torch.tensor(X).float()
 
     # Tải mô hình LSTM đã huấn luyện
-    if not os.path.exists(f"{model_path}/lstm_model_{ticker}.pth"):
-        raise FileNotFoundError(f"Không tìm thấy mô hình tại {model_path}/lstm_model_{ticker}.pth. Vui lòng train trước.")
+    if not os.path.exists(f"{model_path}/model_{ticker}.pth"):
+        raise FileNotFoundError(f"Không tìm thấy mô hình tại {model_path}/model_{ticker}.pth. Vui lòng train trước.")
     
     # Khởi tạo mô hình LSTM
-    model = LSTMModel()
+    model = RNN_LSTMModel()
 
     # Tải trọng số mô hình đã huấn luyện
-    model.load_state_dict(torch.load(f"{model_path}/lstm_model_{ticker}.pth"))
+    model.load_state_dict(torch.load(f"{model_path}/model_{ticker}.pth"))
     model.eval()
     predicted_all = model(X).detach().numpy()
     predicted_all = scaler.inverse_transform(predicted_all)
@@ -99,8 +99,8 @@ def plot_stock_price_lstm(data, ticker, save_path=f"{pic_path}/lstm_prediction.p
 
     plt.figure(figsize=(12, 8))
     plt.plot(dates, real_price, label="Giá thực tế")
-    plt.plot(dates, predicted_all, label="Giá dự báo LSTM")
-    plt.title("So sánh giá thực tế và giá dự báo từ LSTM")
+    plt.plot(dates, predicted_all, label="Giá dự báo RNN + LSTM")
+    plt.title("So sánh giá thực tế và giá dự báo từ RNN + LSTM")
     plt.gca().xaxis.set_major_locator(mdates.YearLocator(base=5))
     plt.gca().xaxis.set_major_formatter(mdates.DateFormatter('%d-%m-%Y'))
     plt.xticks(rotation=45)
@@ -110,16 +110,36 @@ def plot_stock_price_lstm(data, ticker, save_path=f"{pic_path}/lstm_prediction.p
     plt.close()
 
 if __name__ == "__main__":
+    import argparse
     from src.data_loader import load_realtime_data
-    from src.config import default_ticker, pic_path
+    from src.config import pic_path
 
-    # Tải dữ liệu và vẽ biểu đồ
-    ticker = default_ticker
+    parser = argparse.ArgumentParser(description="Visualization for Stock Prediction")
+    parser.add_argument('--ticker', type=str, default='AAPL', help='Mã cổ phiếu')
+    parser.add_argument('--short_window', type=int, default=20, help='SMA short window')
+    parser.add_argument('--long_window', type=int, default=100, help='SMA long window')
+    args = parser.parse_args()
+
+    ticker = args.ticker
+    short_window = args.short_window
+    long_window = args.long_window
+
     data = load_realtime_data(ticker)
-    
-    # Vẽ biểu đồ hiệu suất tích luỹ & tỷ suất thông thường của chiến lược SMA
-    plot_cumulative_return(data=data, short_window=20, long_window=100, save_path=f"{pic_path}/{ticker}/sma_cumulative_return.png")
-    plot_daily_return_sma(data=data, short_window=20, long_window=100, save_path=f"{pic_path}/{ticker}/sma_daily_return.png")
-    
-    # Vẽ biểu đồ giá thực tế và giá dự báo từ mô hình LSTM
-    plot_stock_price_lstm(data=data, ticker=ticker, save_path=f"{pic_path}/{ticker}/lstm_prediction.png")
+
+    plot_cumulative_return(
+        data=data,
+        short_window=short_window,
+        long_window=long_window,
+        save_path=f"{pic_path}/{ticker}/sma_cumulative_return_{ticker}.png"
+    )
+    plot_daily_return_sma(
+        data=data,
+        short_window=short_window,
+        long_window=long_window,
+        save_path=f"{pic_path}/{ticker}/sma_daily_return_{ticker}.png"
+    )
+    plot_stock_price_lstm(
+        data=data,
+        ticker=ticker,
+        save_path=f"{pic_path}/{ticker}/rnn_lstm_prediction_{ticker}.png"
+    )
